@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class helpers {
@@ -24,17 +26,33 @@ public class helpers {
         double x = strafe;
         double rx = turn;
 
-        double flPower = y + x + rx;
-        double frPower = y - x - rx;
-        double blPower = y - x + rx;
-        double brPower = y + x - rx;
+        double power = Math.hypot(x, y);
+        double theta = Math.atan2(y, x);
 
-        double max = Math.max(Math.abs(blPower), Math.max(Math.abs(brPower), Math.max(Math.abs(flPower), Math.abs(frPower))));
+        double sin45 = Math.sin(theta - Math.PI / 4);
+        double cos45 = Math.cos(theta - Math.PI / 4);
+
+        double max = Math.max(Math.abs(sin45), Math.abs(cos45));
+
+        double flPower = (power * cos45 / max) + rx;
+        double frPower = (power * sin45 / max) - rx;
+        double blPower = (power * sin45 / max) + rx;
+        double brPower = (power * cos45 / max) - rx;
+
+        double denom = power + Math.abs(rx);
+        if (denom > 1.0) {
+            flPower /= denom;
+            frPower /= denom;
+            blPower /= denom;
+            brPower /= denom;
+        }
+
+        double Max = Math.max(Math.abs(blPower), Math.max(Math.abs(brPower), Math.max(Math.abs(flPower), Math.abs(frPower))));
         if (max > 1.0) {
-            flPower /= max;
-            frPower /= max;
-            blPower /= max;
-            brPower /= max;
+            flPower /= Max;
+            frPower /= Max;
+            blPower /= Max;
+            brPower /= Max;
         }
 
         if (strafe_right) {
