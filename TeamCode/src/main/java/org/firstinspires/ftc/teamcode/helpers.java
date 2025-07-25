@@ -56,9 +56,9 @@ public class helpers {
         }
 
         if (strafe_right) {
-            setDrivePowers(FL, FR, BL, BR, -0.75, 0.75, 0.75, -0.75);
-        } else if (strafe_left) {
             setDrivePowers(FL, FR, BL, BR, 0.75, -0.75, -0.75, 0.75);
+        } else if (strafe_left) {
+            setDrivePowers(FL, FR, BL, BR, -0.75, 0.75, 0.75, -0.75);
         } else if (up) {
             setDrivePowers(FL, FR, BL, BR, 0.75, 0.75, 0.75, 0.75);
         } else if (down) {
@@ -71,6 +71,7 @@ public class helpers {
                     Math.pow(blPower, 3),
                     Math.pow(brPower, 3)
             );
+
         }
     }
 }

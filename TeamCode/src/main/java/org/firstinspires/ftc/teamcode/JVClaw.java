@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -96,6 +97,18 @@ public class JVClaw extends LinearOpMode {
             double HoldPower = 0.1;//adjust later
 
 
+            if (gamepad1.right_bumper){
+                BL.setDirection(DcMotor.Direction.FORWARD);
+                FL.setDirection(DcMotor.Direction.FORWARD);
+                BR.setDirection(DcMotor.Direction.REVERSE);
+                FR.setDirection(DcMotor.Direction.REVERSE);
+            }
+            else{
+                BL.setDirection(DcMotor.Direction.REVERSE);
+                FL.setDirection(DcMotor.Direction.REVERSE);
+                BR.setDirection(DcMotor.Direction.FORWARD);
+                FR.setDirection(DcMotor.Direction.FORWARD);
+            }
             if (gamepad1.right_trigger > 0.1) {
                 BaseClawMotor.setPower(SlideSpeed);
             }
