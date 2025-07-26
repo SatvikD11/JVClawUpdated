@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class helpers {
@@ -20,7 +22,7 @@ public class helpers {
             DcMotor FL, DcMotor FR, DcMotor BL, DcMotor BR,
             double straight, double strafe, double turn,
             boolean strafe_right, boolean strafe_left,
-            boolean up, boolean down
+            boolean up, boolean down, boolean speedController
     ) {
         double y = -straight;
         double x = strafe;
@@ -54,6 +56,18 @@ public class helpers {
             blPower /= Max;
             brPower /= Max;
         }
+        if (speedController){
+            flPower = flPower;
+            frPower = frPower;
+            blPower = blPower;
+            brPower = brPower;
+        } else{
+            flPower = 0.5 * flPower;
+            frPower = 0.5 * frPower;
+            blPower = 0.5 * blPower;
+            brPower = 0.5 * brPower;
+        }
+
 
         if (strafe_right) {
             setDrivePowers(FL, FR, BL, BR, 0.75, -0.75, -0.75, 0.75);
