@@ -56,27 +56,16 @@ public class helpers {
             blPower /= Max;
             brPower /= Max;
         }
-        if (speedController){
-            flPower = flPower;
-            frPower = frPower;
-            blPower = blPower;
-            brPower = brPower;
-        } else{
-            flPower = 0.5 * flPower;
-            frPower = 0.5 * frPower;
-            blPower = 0.5 * blPower;
-            brPower = 0.5 * brPower;
-        }
 
-
+    if (speedController){
         if (strafe_right) {
-            setDrivePowers(FL, FR, BL, BR, 0.75, -0.75, -0.75, 0.75);
+            setDrivePowers(FL, FR, BL, BR, 0.85, -0.85, -0.85, 0.85);
         } else if (strafe_left) {
-            setDrivePowers(FL, FR, BL, BR, -0.75, 0.75, 0.75, -0.75);
+            setDrivePowers(FL, FR, BL, BR, -0.85, 0.85, 0.85, -0.85);
         } else if (up) {
-            setDrivePowers(FL, FR, BL, BR, 0.75, 0.75, 0.75, 0.75);
+            setDrivePowers(FL, FR, BL, BR, 0.85, 0.85, 0.85, 0.85);
         } else if (down) {
-            setDrivePowers(FL, FR, BL, BR, -0.75, -0.75, -0.75, -0.75);
+            setDrivePowers(FL, FR, BL, BR, -0.85, -0.85, -0.85, -0.85);
         } else {
             setDrivePowers(
                     FL, FR, BL, BR,
@@ -85,7 +74,25 @@ public class helpers {
                     Math.pow(blPower, 3),
                     Math.pow(brPower, 3)
             );
-
         }
+
+        } else {
+            if (strafe_right) {
+                setDrivePowers(FL, FR, BL, BR, 0.65, -0.65, -0.65, 0.65);
+            } else if (strafe_left) {
+                setDrivePowers(FL, FR, BL, BR, -0.65, 0.65, 0.65, -0.65);
+            } else if (up) {
+                setDrivePowers(FL, FR, BL, BR, 0.65, 0.65, 0.65, 0.65);
+            } else if (down) {
+                setDrivePowers(FL, FR, BL, BR, -0.65, -0.65, -0.65, -0.65);
+            } else {
+                setDrivePowers(
+                    FL, FR, BL, BR,
+                    Math.pow(flPower*0.75, 3),
+                    Math.pow(frPower*0.75, 3),
+                    Math.pow(blPower*0.75, 3),
+                    Math.pow(brPower*0.75, 3)
+            );
+    }
     }
 }

@@ -75,9 +75,9 @@ public class JVClaw extends LinearOpMode {
         FR = hardwareMap.get(DcMotor.class, "rightFront");
         BaseClawMotor = hardwareMap.get(DcMotor.class, "base_motor");
 
-        ServoClaw = hardwareMap.get(Servo.class, "servo_claw");
-        RightProng = hardwareMap.get(Servo.class, "right_prong");
-        LeftProng = hardwareMap.get(Servo.class, "left_prong");
+        //ServoClaw = hardwareMap.get(Servo.class, "servo_claw");
+        //RightProng = hardwareMap.get(Servo.class, "right_prong");
+        //LeftProng = hardwareMap.get(Servo.class, "left_prong");
 
 
         // Set motor directions
@@ -96,7 +96,7 @@ public class JVClaw extends LinearOpMode {
             double SlideSpeed = gamepad1.right_trigger;
             double HoldPower = 0.1;//adjust later
 
-            if (gamepad1.left_bumper){
+            /*if (gamepad1.left_bumper){
                 BL.setDirection(DcMotor.Direction.FORWARD);
                 FL.setDirection(DcMotor.Direction.FORWARD);
                 BR.setDirection(DcMotor.Direction.REVERSE);
@@ -138,7 +138,7 @@ public class JVClaw extends LinearOpMode {
             RightProng.setPosition(ProngPos);//have to put it after the gamepad input so the position is proper
             LeftProng.setPosition(1.0-ProngPos);
             ServoClaw.setPosition(ClawPos);
-
+*/
 
             telemetry.addData("ClawPos", "%.2f", ClawPos);
             telemetry.addData("RightProngPos", "%.2f", ProngPos);
