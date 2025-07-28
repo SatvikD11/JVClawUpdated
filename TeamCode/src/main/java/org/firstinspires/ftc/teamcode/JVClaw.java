@@ -91,12 +91,12 @@ public class JVClaw extends LinearOpMode {
         telemetry.update();
         waitForStart();
         while (opModeIsActive()) {
-            BasicTele(FL, FR, BL, BR, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, gamepad1.dpad_right, gamepad1.dpad_left, gamepad1.dpad_up, gamepad1.dpad_down, gamepad2.right_bumper && gamepad2.left_bumper);
+            BasicTele(FL, FR, BL, BR, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, gamepad1.dpad_right, gamepad1.dpad_left, gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.right_bumper && gamepad1.left_bumper);
             double SlideDownSpeed = gamepad1.left_trigger;
             double SlideSpeed = gamepad1.right_trigger;
             double HoldPower = 0.1;//adjust later
 
-            /*if (gamepad1.left_bumper){
+            if (gamepad1.right_stick_button){
                 BL.setDirection(DcMotor.Direction.FORWARD);
                 FL.setDirection(DcMotor.Direction.FORWARD);
                 BR.setDirection(DcMotor.Direction.REVERSE);
@@ -108,7 +108,7 @@ public class JVClaw extends LinearOpMode {
                 BR.setDirection(DcMotor.Direction.FORWARD);
                 FR.setDirection(DcMotor.Direction.FORWARD);
             }
-            if (gamepad2.right_trigger > 0.1) {
+            /*if (gamepad2.right_trigger > 0.1) {
                 BaseClawMotor.setPower(SlideSpeed);
             }
             else if (gamepad2.left_trigger > 0.1) {

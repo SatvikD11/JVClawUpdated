@@ -57,6 +57,7 @@ public class helpers {
             brPower /= Max;
         }
 
+
     if (speedController){
         if (strafe_right) {
             setDrivePowers(FL, FR, BL, BR, 0.85, -0.85, -0.85, 0.85);
@@ -77,22 +78,23 @@ public class helpers {
         }
 
         } else {
-            if (strafe_right) {
-                setDrivePowers(FL, FR, BL, BR, 0.65, -0.65, -0.65, 0.65);
-            } else if (strafe_left) {
-                setDrivePowers(FL, FR, BL, BR, -0.65, 0.65, 0.65, -0.65);
-            } else if (up) {
-                setDrivePowers(FL, FR, BL, BR, 0.65, 0.65, 0.65, 0.65);
-            } else if (down) {
-                setDrivePowers(FL, FR, BL, BR, -0.65, -0.65, -0.65, -0.65);
-            } else {
-                setDrivePowers(
+        if (strafe_right) {
+            setDrivePowers(FL, FR, BL, BR, 0.55, -0.55, -0.55, 0.55);
+        } else if (strafe_left) {
+            setDrivePowers(FL, FR, BL, BR, -0.55, 0.55, 0.55, -0.55);
+        } else if (up) {
+            setDrivePowers(FL, FR, BL, BR, 0.55, 0.55, 0.55, 0.55);
+        } else if (down) {
+            setDrivePowers(FL, FR, BL, BR, -0.55, -0.55, -0.55, -0.55);
+        } else {
+            setDrivePowers(
                     FL, FR, BL, BR,
-                    Math.pow(flPower*0.75, 3),
-                    Math.pow(frPower*0.75, 3),
-                    Math.pow(blPower*0.75, 3),
-                    Math.pow(brPower*0.75, 3)
+                    Math.pow(flPower * 0.7, 3),
+                    Math.pow(frPower * 0.7, 3),
+                    Math.pow(blPower * 0.7, 3),
+                    Math.pow(brPower * 0.7, 3)
             );
-    }
+            }
+        }
     }
 }
