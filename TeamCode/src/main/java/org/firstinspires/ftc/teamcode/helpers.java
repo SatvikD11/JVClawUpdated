@@ -22,7 +22,7 @@ public class helpers {
             DcMotor FL, DcMotor FR, DcMotor BL, DcMotor BR,
             double straight, double strafe, double turn,
             boolean strafe_right, boolean strafe_left,
-            boolean up, boolean down, boolean speedController
+            boolean up, boolean down
     ) {
         double y = -straight;
         double x = strafe;
@@ -58,26 +58,7 @@ public class helpers {
         }
 
 
-    if (speedController){
-        if (strafe_right) {
-            setDrivePowers(FL, FR, BL, BR, 0.85, -0.85, -0.85, 0.85);
-        } else if (strafe_left) {
-            setDrivePowers(FL, FR, BL, BR, -0.85, 0.85, 0.85, -0.85);
-        } else if (up) {
-            setDrivePowers(FL, FR, BL, BR, 0.85, 0.85, 0.85, 0.85);
-        } else if (down) {
-            setDrivePowers(FL, FR, BL, BR, -0.85, -0.85, -0.85, -0.85);
-        } else {
-            setDrivePowers(
-                    FL, FR, BL, BR,
-                    Math.pow(flPower, 3),
-                    Math.pow(frPower, 3),
-                    Math.pow(blPower, 3),
-                    Math.pow(brPower, 3)
-            );
-        }
 
-        } else {
         if (strafe_right) {
             setDrivePowers(FL, FR, BL, BR, 0.55, -0.55, -0.55, 0.55);
         } else if (strafe_left) {
@@ -97,4 +78,4 @@ public class helpers {
             }
         }
     }
-}
+
