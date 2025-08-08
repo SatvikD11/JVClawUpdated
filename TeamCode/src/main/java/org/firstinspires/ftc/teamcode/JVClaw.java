@@ -64,8 +64,8 @@ public class JVClaw extends LinearOpMode {
     public static final double ARM_UP_POWER = 0.45;
     public static final double ARM_DOWN_POWER = -0.45;
     double ClawPos = 0.1;
-    double RightProngPos = 0.1;
-    double LeftProngPos = 0.1;
+    double RightProngPos = 0.8;
+    double LeftProngPos = 0.4;
 
     @Override
     public void runOpMode() {
@@ -119,26 +119,26 @@ public class JVClaw extends LinearOpMode {
                 BaseClawMotor.setPower(HoldPower);
             }*/
             if (gamepad1.x && getRuntime() > 0.2) {
-                LeftProngPos -= 0.2;
-                RightProngPos += 0.2;
+                LeftProngPos -= 0.1;
+                RightProngPos += 0.1;
                 resetRuntime();
             }
             else if (gamepad1.b && getRuntime() > 0.2){
-                LeftProngPos += 0.2;
-                RightProngPos -= 0.2;
+                LeftProngPos += 0.1;
+                RightProngPos -= 0.1;
                 resetRuntime();
             }
             if (gamepad1.y && getRuntime() > 0.2){
-                ClawPos -= 0.2;
+                ClawPos = 0.0;
                 resetRuntime();
             }
             else if (gamepad1.a && getRuntime() > 0.2){
-                ClawPos += 0.2;
+                ClawPos = 0.3;
                 resetRuntime();
             }
-            ClawPos = Range.clip(ClawPos, 0.0, 1.0);//clips after the inputs
-            RightProngPos = Range.clip(RightProngPos, 0.0, 1.0);
-            LeftProngPos = Range.clip(LeftProngPos, 0.0, 1.0);
+            ClawPos = Range.clip(ClawPos, 0.0, 0.3);//clips after the inputs
+            RightProngPos = Range.clip(RightProngPos, 0.4, 0.8);
+            LeftProngPos = Range.clip(LeftProngPos, 0.0, 0.4);
             RightProng.setPosition(RightProngPos);//have to put it after the gamepad input so the position is proper
             LeftProng.setPosition(LeftProngPos);
             ServoClaw.setPosition(ClawPos);
@@ -146,7 +146,7 @@ public class JVClaw extends LinearOpMode {
 
             telemetry.addData("ClawPos", "%.2f", ClawPos);
             telemetry.addData("RightProngPos", "%.2f", RightProngPos);
-            telemetry.addData("RightProngPos", "%.2f", LeftProngPos);
+            telemetry.addData("LeftProngPos", "%.2f", LeftProngPos);
             telemetry.update();
 
             sleep(50);
