@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 /*
  * This OpMode executes a POV Game style Teleop for a direct drive robot
  * The code is structured as a LinearOpMode
@@ -63,8 +63,9 @@ public class JVClaw extends LinearOpMode {
     public static final double MID_SERVO = 0.5;
     public static final double ARM_UP_POWER = 0.45;
     public static final double ARM_DOWN_POWER = -0.45;
-    double ClawPos = 0.5;
-    double ProngPos = 0.5;
+    double ClawPos = 0.1;
+    double RightProngPos = 0.1;
+    double LeftProngPos = 0.1;
 
     @Override
     public void runOpMode() {
@@ -73,11 +74,11 @@ public class JVClaw extends LinearOpMode {
         BR = hardwareMap.get(DcMotor.class, "rightRear");
         FL = hardwareMap.get(DcMotor.class, "leftFront");
         FR = hardwareMap.get(DcMotor.class, "rightFront");
-        BaseClawMotor = hardwareMap.get(DcMotor.class, "base_motor");
+        //BaseClawMotor = hardwareMap.get(DcMotor.class, "base_motor");
 
-        //ServoClaw = hardwareMap.get(Servo.class, "servo_claw");
-        //RightProng = hardwareMap.get(Servo.class, "right_prong");
-        //LeftProng = hardwareMap.get(Servo.class, "left_prong");
+        ServoClaw = hardwareMap.get(ServoImplEx.class, "servo_claw");
+        RightProng = hardwareMap.get(ServoImplEx.class, "right_prong");
+        LeftProng = hardwareMap.get(ServoImplEx.class, "left_prong");
 
 
         // Set motor directions
@@ -116,32 +117,36 @@ public class JVClaw extends LinearOpMode {
             }
             else{
                 BaseClawMotor.setPower(HoldPower);
-            }
-            if (gamepad2.circle && getRuntime() > 0.2) {
-                ProngPos += 0.2;
+            }*/
+            if (gamepad1.x && getRuntime() > 0.2) {
+                LeftProngPos -= 0.2;
+                RightProngPos += 0.2;
                 resetRuntime();
             }
-            else if (gamepad2.cross && getRuntime() > 0.2){
-                ProngPos -= 0.2;
+            else if (gamepad1.b && getRuntime() > 0.2){
+                LeftProngPos += 0.2;
+                RightProngPos -= 0.2;
                 resetRuntime();
             }
-            if (gamepad2.left_bumper && getRuntime() > 0.2){
+            if (gamepad1.y && getRuntime() > 0.2){
                 ClawPos -= 0.2;
                 resetRuntime();
             }
-            else if (gamepad2.right_bumper && getRuntime() > 0.2){
+            else if (gamepad1.a && getRuntime() > 0.2){
                 ClawPos += 0.2;
                 resetRuntime();
             }
             ClawPos = Range.clip(ClawPos, 0.0, 1.0);//clips after the inputs
-            ProngPos = Range.clip(ProngPos, 0.0, 1.0);
-            RightProng.setPosition(ProngPos);//have to put it after the gamepad input so the position is proper
-            LeftProng.setPosition(1.0-ProngPos);
+            RightProngPos = Range.clip(RightProngPos, 0.0, 1.0);
+            LeftProngPos = Range.clip(LeftProngPos, 0.0, 1.0);
+            RightProng.setPosition(RightProngPos);//have to put it after the gamepad input so the position is proper
+            LeftProng.setPosition(LeftProngPos);
             ServoClaw.setPosition(ClawPos);
-*/
+
 
             telemetry.addData("ClawPos", "%.2f", ClawPos);
-            telemetry.addData("RightProngPos", "%.2f", ProngPos);
+            telemetry.addData("RightProngPos", "%.2f", RightProngPos);
+            telemetry.addData("RightProngPos", "%.2f", LeftProngPos);
             telemetry.update();
 
             sleep(50);
