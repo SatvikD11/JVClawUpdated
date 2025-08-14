@@ -119,13 +119,13 @@ public class JVClaw extends LinearOpMode {
                 BaseClawMotor.setPower(HoldPower);
             }*/
             if (gamepad1.x && getRuntime() > 0.2) {
-                LeftProngPos -= 0.1;
-                RightProngPos += 0.1;
+                LeftProngPos = 0.0;
+                RightProngPos = 0.4;
                 resetRuntime();
             }
             else if (gamepad1.b && getRuntime() > 0.2){
-                LeftProngPos += 0.1;
-                RightProngPos -= 0.1;
+                LeftProngPos = 0.4;
+                RightProngPos = 0.8;
                 resetRuntime();
             }
             if (gamepad1.y && getRuntime() > 0.2){
