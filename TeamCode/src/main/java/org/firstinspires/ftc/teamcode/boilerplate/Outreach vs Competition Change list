@@ -1,0 +1,13 @@
+This shows what needs to be changed between competitions and outreach
+
+In BoilerBot.java, line 28, change OutreachMode. It changes things at the following locations:
+
+                            |---------------------|-------------|
+                            |File                 | line(s)     |
+                            |---------------------|-------------|
+                            |BoilerTeleSpeci.java | 21, 57, 92  |
+                            |---------------------|-------------|
+                            |BoilerTeleBasket.java| 21, 57, 92  |
+                            |---------------------|-------------|
+                            |BoilerOuttake.java   | 74, 75      |
+                            |---------------------|-------------|

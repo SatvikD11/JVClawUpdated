@@ -1,0 +1,13 @@
+This is an Index for storing and locating calculations used for the code
+
+Control:
+
+inchespertickX: encoder's counts per revolution / circumference
+
+inchespertickY: encoder's counts per revolution / circumference
+
+SparkIMU:
+
+otos.setAngularScalar: spin 10 times. Find the ratio it is off by.
+
+otos.setLinearScalar: move forward 100 cm or more. bring back and find the ratio it is off by.
