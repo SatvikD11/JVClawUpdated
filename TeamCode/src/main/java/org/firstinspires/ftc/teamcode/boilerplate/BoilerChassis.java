@@ -96,7 +96,6 @@ public class BoilerChassis {
         if(fieldCentric){
             double rangle = otos.otos.getPosition().h;
             rangle = (rangle < 0) ? Math.toRadians(360) + rangle : rangle;
-
             double turn = (direction < rangle) ? (Math.toRadians(360) - rangle) + (Math.abs(0 - direction)) : direction - rangle; //figure out which way to turn and how much
             //double turn = rads;
             //turn effects the rotation of the robot. mag effects the speed of the robot.
