@@ -92,17 +92,17 @@ public class PedroPath {
     }
 
     private double inchesToTicks(double inches) {
-        double TICKS_PER_REV = 537.7; // GoBilda 312 RPM
-        double WHEEL_DIAMETER = 3.78; // in inches
+        double TICKS_PER_REV = 28; // GoBilda 312 RPM
+        double WHEEL_DIAMETER = 4.09; // in inches
         double TICKS_PER_INCH = TICKS_PER_REV / (Math.PI * WHEEL_DIAMETER);
         return inches * TICKS_PER_INCH;
     }
 
     private double degreesToTicks(double degrees) {
         // tune for your robot’s turn geometry
-        double ROBOT_CIRCUMFERENCE = 18.0 * Math.PI;
-        double TICKS_PER_REV = 537.7;
-        double WHEEL_DIAMETER = 3.78;
+        double ROBOT_CIRCUMFERENCE = 11.25 * Math.PI;
+        double TICKS_PER_REV = 28;
+        double WHEEL_DIAMETER = 4.09;
         double TICKS_PER_INCH = TICKS_PER_REV / (Math.PI * WHEEL_DIAMETER);
         return (degrees / 360.0) * (ROBOT_CIRCUMFERENCE * TICKS_PER_INCH);
     }

@@ -39,6 +39,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+
+import org.firstinspires.ftc.teamcode.pathing.PedroPath;
 /*
  * This OpMode executes a POV Game style Teleop for a direct drive robot
  * The code is structured as a LinearOpMode
@@ -57,6 +59,8 @@ public class JVClaw extends LinearOpMode {
 
     public DcMotor BL, BR, FL, FR, BaseClawMotor;
     public Servo ServoClaw, RightProng, LeftProng;
+
+    public PedroPath PedroBody;
 
     public static final double MID_SERVO = 0.5;
     public static final double ARM_UP_POWER = 0.45;
@@ -93,6 +97,7 @@ public class JVClaw extends LinearOpMode {
             BasicTele(FL, FR, BL, BR, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, gamepad1.dpad_right, gamepad1.dpad_left, gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.right_bumper && gamepad1.left_bumper || gamepad1.left_stick_button);
             double SlideDownSpeed = gamepad1.left_trigger;
             double SlideSpeed = gamepad1.right_trigger;
+            PedroBody = new PedroPath(FL,FR,BL,BR);
             double HoldPower = 0.1;//adjust later
 
             if (gamepad1.right_stick_button){
@@ -116,7 +121,20 @@ public class JVClaw extends LinearOpMode {
             else{
                 BaseClawMotor.setPower(HoldPower);
             }*/
-            if (gamepad1.x && getRuntime() > 0.2) {
+            if (gamepad1.triangle && getRuntime() > 0.2){
+                PedroBody.driveForward(11, 0.5);
+            }
+            else if (gamepad1.square && getRuntime() > 0.2){
+                PedroBody.turn(-90, 1);
+            }
+            else if (gamepad1.circle && getRuntime() > 0.2){
+                PedroBody.driveForward(11, -0.5);
+            }
+            else if (gamepad1.square && getRuntime() > 0.2){
+                PedroBody.turn(90, 1);
+            }
+
+            /*if (gamepad1.x && getRuntime() > 0.2) {
                 LeftProngPos -= 0.1;
                 RightProngPos += 0.1;
                 resetRuntime();
@@ -133,7 +151,7 @@ public class JVClaw extends LinearOpMode {
             else if (gamepad1.a && getRuntime() > 0.2){
                 ClawPos = 0.3;
                 resetRuntime();
-            }
+            }*/
             ClawPos = Range.clip(ClawPos, 0.0, 0.3);//clips after the inputs
             RightProngPos = Range.clip(RightProngPos, 0.4, 0.8);
             LeftProngPos = Range.clip(LeftProngPos, 0.0, 0.4);
