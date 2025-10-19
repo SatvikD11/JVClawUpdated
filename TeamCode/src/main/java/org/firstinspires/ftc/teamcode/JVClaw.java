@@ -72,10 +72,10 @@ public class JVClaw extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        BL = hardwareMap.get(DcMotor.class, "leftRear");
-        BR = hardwareMap.get(DcMotor.class, "rightRear");
-        FL = hardwareMap.get(DcMotor.class, "leftFront");
-        FR = hardwareMap.get(DcMotor.class, "rightFront");
+        BL = hardwareMap.get(DcMotor.class, "BL");
+        BR = hardwareMap.get(DcMotor.class, "BR");
+        FL = hardwareMap.get(DcMotor.class, "FL");
+        FR = hardwareMap.get(DcMotor.class, "FR");
         //BaseClawMotor = hardwareMap.get(DcMotor.class, "base_motor");
 
         ServoClaw = hardwareMap.get(ServoImplEx.class, "servo_claw");
@@ -151,7 +151,7 @@ public class JVClaw extends LinearOpMode {
             else if (gamepad1.a && getRuntime() > 0.2){
                 ClawPos = 0.3;
                 resetRuntime();
-            }*/
+            }
             ClawPos = Range.clip(ClawPos, 0.0, 0.3);//clips after the inputs
             RightProngPos = Range.clip(RightProngPos, 0.4, 0.8);
             LeftProngPos = Range.clip(LeftProngPos, 0.0, 0.4);
@@ -164,7 +164,7 @@ public class JVClaw extends LinearOpMode {
             telemetry.addData("RightProngPos", "%.2f", RightProngPos);
             telemetry.addData("LeftProngPos", "%.2f", LeftProngPos);
             telemetry.update();
-
+             */
             sleep(50);
         }
     }
