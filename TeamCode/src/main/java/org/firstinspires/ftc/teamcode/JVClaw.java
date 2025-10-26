@@ -89,7 +89,7 @@ public class JVClaw extends LinearOpMode {
         BR.setDirection(DcMotor.Direction.FORWARD);
         FR.setDirection(DcMotor.Direction.FORWARD);
 
-
+        PedroBody = new PedroPath(this, hardwareMap,FL,FR,BL,BR);
         telemetry.addData(">", "Robot Ready. Press START.");
         telemetry.update();
         waitForStart();
@@ -97,7 +97,7 @@ public class JVClaw extends LinearOpMode {
             BasicTele(FL, FR, BL, BR, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, gamepad1.dpad_right, gamepad1.dpad_left, gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.right_bumper && gamepad1.left_bumper || gamepad1.left_stick_button);
             double SlideDownSpeed = gamepad1.left_trigger;
             double SlideSpeed = gamepad1.right_trigger;
-            PedroBody = new PedroPath(hardwareMap,FL,FR,BL,BR);
+
             double HoldPower = 0.1;//adjust later
 
             if (gamepad1.right_stick_button){
@@ -165,7 +165,7 @@ public class JVClaw extends LinearOpMode {
             telemetry.addData("LeftProngPos", "%.2f", LeftProngPos);
             telemetry.update();
              */
-            sleep(50);
+            if (!opModeIsActive()) break;
         }
     }
 }
