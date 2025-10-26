@@ -72,21 +72,43 @@ public class JVClaw extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        // Hardware setup
         BL = hardwareMap.get(DcMotor.class, "BL");
         BR = hardwareMap.get(DcMotor.class, "BR");
         FL = hardwareMap.get(DcMotor.class, "FL");
         FR = hardwareMap.get(DcMotor.class, "FR");
+
+// Motor test block
+        FL.setPower(0.5);
+        sleep(1000);
+        FL.setPower(0);
+        FR.setPower(0.5);
+        sleep(1000);
+        FR.setPower(0);
+        BL.setPower(0.5);
+        sleep(1000);
+        BL.setPower(0);
+        BR.setPower(0.5);
+        sleep(1000);
+        BR.setPower(0);
+
+// After confirming which wheel moves for each motor, adjust mapping:
+        telemetry.addData(">", "Check motor directions. Then press Start.");
+        telemetry.update();
+
+        waitForStart();
+
         //BaseClawMotor = hardwareMap.get(DcMotor.class, "base_motor");
 
-        ServoClaw = hardwareMap.get(ServoImplEx.class, "servo_claw");
-        RightProng = hardwareMap.get(ServoImplEx.class, "right_prong");
-        LeftProng = hardwareMap.get(ServoImplEx.class, "left_prong");
+        //ServoClaw = hardwareMap.get(ServoImplEx.class, "servo_claw");
+        //RightProng = hardwareMap.get(ServoImplEx.class, "right_prong");
+        //LeftProng = hardwareMap.get(ServoImplEx.class, "left_prong");
 
 
         // Set motor directions
         BL.setDirection(DcMotor.Direction.REVERSE);
-        FL.setDirection(DcMotor.Direction.REVERSE);
-        BR.setDirection(DcMotor.Direction.FORWARD);
+        BR.setDirection(DcMotor.Direction.REVERSE);
+        FL.setDirection(DcMotor.Direction.FORWARD);
         FR.setDirection(DcMotor.Direction.FORWARD);
 
         PedroBody = new PedroPath(this, hardwareMap,FL,FR,BL,BR);
