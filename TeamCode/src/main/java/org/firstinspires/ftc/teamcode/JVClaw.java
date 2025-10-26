@@ -97,7 +97,7 @@ public class JVClaw extends LinearOpMode {
             BasicTele(FL, FR, BL, BR, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, gamepad1.dpad_right, gamepad1.dpad_left, gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.right_bumper && gamepad1.left_bumper || gamepad1.left_stick_button);
             double SlideDownSpeed = gamepad1.left_trigger;
             double SlideSpeed = gamepad1.right_trigger;
-            PedroBody = new PedroPath(FL,FR,BL,BR);
+            PedroBody = new PedroPath(hardwareMap,FL,FR,BL,BR);
             double HoldPower = 0.1;//adjust later
 
             if (gamepad1.right_stick_button){
@@ -125,13 +125,13 @@ public class JVClaw extends LinearOpMode {
                 PedroBody.driveForward(11, 0.5);
             }
             else if (gamepad1.square && getRuntime() > 0.2){
-                PedroBody.turn(-90, 1);
+                PedroBody.turnIMU(-90, 1);
             }
             else if (gamepad1.circle && getRuntime() > 0.2){
                 PedroBody.driveForward(11, -0.5);
             }
             else if (gamepad1.square && getRuntime() > 0.2){
-                PedroBody.turn(90, 1);
+                PedroBody.turnIMU(90, 1);
             }
 
             /*if (gamepad1.x && getRuntime() > 0.2) {
