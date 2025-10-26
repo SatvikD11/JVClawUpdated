@@ -36,6 +36,7 @@ import static org.firstinspires.ftc.teamcode.helpers.BasicTele;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -106,9 +107,9 @@ public class JVClaw extends LinearOpMode {
 
 
         // Set motor directions
-        BL.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.FORWARD);
         BR.setDirection(DcMotor.Direction.REVERSE);
-        FL.setDirection(DcMotor.Direction.FORWARD);
+        FL.setDirection(DcMotor.Direction.REVERSE);
         FR.setDirection(DcMotor.Direction.FORWARD);
 
         PedroBody = new PedroPath(this, hardwareMap,FL,FR,BL,BR);
@@ -129,9 +130,9 @@ public class JVClaw extends LinearOpMode {
                 FR.setDirection(DcMotor.Direction.REVERSE);
             }
             else{
-                BL.setDirection(DcMotor.Direction.REVERSE);
+                BL.setDirection(DcMotor.Direction.FORWARD);
                 FL.setDirection(DcMotor.Direction.REVERSE);
-                BR.setDirection(DcMotor.Direction.FORWARD);
+                BR.setDirection(DcMotor.Direction.REVERSE);
                 FR.setDirection(DcMotor.Direction.FORWARD);
             }
             /*if (gamepad2.right_trigger > 0.1) {
