@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.pathing.PedroPath;
-import org.firstinspires.ftc.teamcode.helpers.BasicTele;
+import org.firstinspires.ftc.teamcode.helpers;
 
 @TeleOp(name="Robot: JV Claw", group="Robot")
 public class JVClaw extends LinearOpMode {
@@ -41,7 +41,7 @@ public class JVClaw extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Basic drive control
-            BasicTele.basicTele(
+            helpers.BasicTele(
                     FL, FR, BL, BR,
                     gamepad1.left_stick_y,
                     gamepad1.left_stick_x,
