@@ -40,7 +40,6 @@ public class JVClaw extends LinearOpMode {
         // --- Main TeleOp Loop ---
         while (opModeIsActive()) {
 
-            // Basic drive (make sure the helper method name matches your helpers.java)
             helpers.BasicTele(
                     FL, FR, BL, BR,
                     gamepad1.left_stick_y,
