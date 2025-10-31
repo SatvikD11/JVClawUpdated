@@ -107,16 +107,17 @@ public class JVClaw extends LinearOpMode {
 
 
         // Set motor directions
-        BL.setDirection(DcMotor.Direction.FORWARD);
-        BR.setDirection(DcMotor.Direction.REVERSE);
-        FL.setDirection(DcMotor.Direction.REVERSE);
-        FR.setDirection(DcMotor.Direction.FORWARD);
+        FL.setDirection(DcMotor.Direction.FORWARD);
+        FR.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.REVERSE);
+        BR.setDirection(DcMotor.Direction.FORWARD);
 
         PedroBody = new PedroPath(this, hardwareMap,FL,FR,BL,BR);
         telemetry.addData(">", "Robot Ready. Press START.");
         telemetry.update();
         waitForStart();
         while (opModeIsActive()) {
+            if (!opModeIsActive()) break;
             BasicTele(FL, FR, BL, BR, gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, gamepad1.dpad_right, gamepad1.dpad_left, gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.right_bumper && gamepad1.left_bumper || gamepad1.left_stick_button);
             double SlideDownSpeed = gamepad1.left_trigger;
             double SlideSpeed = gamepad1.right_trigger;
@@ -129,11 +130,7 @@ public class JVClaw extends LinearOpMode {
                 BR.setDirection(DcMotor.Direction.REVERSE);
                 FR.setDirection(DcMotor.Direction.REVERSE);
             }
-            else{
-                BL.setDirection(DcMotor.Direction.FORWARD);
-                FL.setDirection(DcMotor.Direction.REVERSE);
-                BR.setDirection(DcMotor.Direction.REVERSE);
-                FR.setDirection(DcMotor.Direction.FORWARD);
+
             }
             /*if (gamepad2.right_trigger > 0.1) {
                 BaseClawMotor.setPower(SlideSpeed);
@@ -146,15 +143,19 @@ public class JVClaw extends LinearOpMode {
             }*/
             if (gamepad1.triangle && getRuntime() > 0.2){
                 PedroBody.driveForward(11, 0.5);
+                resetRuntime();
             }
             else if (gamepad1.square && getRuntime() > 0.2){
                 PedroBody.turnIMU(-90, 1);
+                resetRuntime();
             }
             else if (gamepad1.circle && getRuntime() > 0.2){
                 PedroBody.driveForward(11, -0.5);
+                resetRuntime();
             }
             else if (gamepad1.square && getRuntime() > 0.2){
                 PedroBody.turnIMU(90, 1);
+                resetRuntime();
             }
 
             /*if (gamepad1.x && getRuntime() > 0.2) {
@@ -188,10 +189,10 @@ public class JVClaw extends LinearOpMode {
             telemetry.addData("LeftProngPos", "%.2f", LeftProngPos);
             telemetry.update();
              */
-            if (!opModeIsActive()) break;
+
         }
     }
-}
+
 
 
 
