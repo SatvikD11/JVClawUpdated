@@ -1,22 +1,22 @@
 package org.firstinspires.ftc.teamcode.pathing;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class PedroPath {
     private final DcMotor FL, FR, BL, BR;
     private final LinearOpMode opMode;
     private final BNO055IMU imu;
-    private Pose currentPose = new Pose(0, 0, 0);
     private Orientation angles;
     private final ElapsedTime timer = new ElapsedTime();
 
-    // PID coefficients
+    // --- PID coefficients (used for turning) ---
     private final double Kp = 0.01;
     private final double Ki = 0.0;
     private final double Kd = 0.002;
@@ -24,13 +24,33 @@ public class PedroPath {
     private double lastError = 0.0;
     private double integral = 0.0;
 
-    public PedroPath(LinearOpMode opMode, HardwareMap hardwareMap,
-                     DcMotor FL, DcMotor FR, DcMotor BL, DcMotor BR) {
+    // --- Constants for encoder drive ---
+    private static final double TICKS_PER_REV = 560; // GoBilda 312 RPM motor
+    private static final double WHEEL_DIAMETER_INCHES = 3.77;
+    private static final double TICKS_PER_INCH = TICKS_PER_REV / (Math.PI * WHEEL_DIAMETER_INCHES);
+
+    public PedroPath(LinearOpMode opMode, HardwareMap hardwareMap) {
         this.opMode = opMode;
-        this.FL = FL;
-        this.FR = FR;
-        this.BL = BL;
-        this.BR = BR;
+
+        // Initialize drive motors
+        FL = hardwareMap.get(DcMotor.class, "FL");
+        FR = hardwareMap.get(DcMotor.class, "FR");
+        BL = hardwareMap.get(DcMotor.class, "BL");
+        BR = hardwareMap.get(DcMotor.class, "BR");
+
+        // Set directions — adjust if reversed
+        FL.setDirection(DcMotorSimple.Direction.FORWARD);
+        BL.setDirection(DcMotorSimple.Direction.FORWARD);
+        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        // Set all motors to brake when zero power is applied
+        DcMotor[] motors = {FL, FR, BL, BR};
+        for (DcMotor m : motors) {
+            m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
 
         // Initialize IMU
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
@@ -43,43 +63,46 @@ public class PedroPath {
         timer.reset();
     }
 
-    /** Drive straight for a given distance in inches */
-    public void driveForward(double targetDistanceInches, double power) {
-        resetEncoders();
-        double targetTicks = inchesToTicks(targetDistanceInches);
+    // --- Drive Forward using Encoders ---
+    public void driveForward(double inches, double power) {
+        int moveCounts = (int) (inches * TICKS_PER_INCH);
 
-        while (opMode.opModeIsActive() &&
-                Math.abs(avgEncoderPosition()) < Math.abs(targetTicks)) {
+        FL.setTargetPosition(FL.getCurrentPosition() + moveCounts);
+        FR.setTargetPosition(FR.getCurrentPosition() + moveCounts);
+        BL.setTargetPosition(BL.getCurrentPosition() + moveCounts);
+        BR.setTargetPosition(BR.getCurrentPosition() + moveCounts);
 
-            double error = targetTicks - avgEncoderPosition();
-            double derivative = error - lastError;
-            integral += error;
-            double correction = (Kp * error) + (Ki * integral) + (Kd * derivative);
-
-            double drivePower = RangeClip(power * Math.signum(targetDistanceInches) + correction, -1.0, 1.0);
-            setDrivePower(drivePower);
-
-            lastError = error;
-            updatePose();
+        DcMotor[] motors = {FL, FR, BL, BR};
+        for (DcMotor m : motors) {
+            m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            m.setPower(Math.abs(power));
         }
 
+        while (opMode.opModeIsActive() && (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy())) {
+            opMode.idle();
+        }
+
+        // Stop and reset to normal
         setDrivePower(0);
+        for (DcMotor m : motors)
+            m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    /** Turn a specific angle using IMU feedback */
-    public void turnIMU(double targetAngle, double power) {
-        double initialHeading = getHeading();
-        double desiredHeading = initialHeading + targetAngle;
+    // --- Turn with IMU Feedback ---
+    public void turnIMU(double targetAngle, double maxPower) {
+        double startAngle = getHeading();
+        double target = startAngle + targetAngle;
         double error;
 
-        while (opMode.opModeIsActive() &&
-                Math.abs(error = angleError(desiredHeading, getHeading())) > 1.0) {
+        integral = 0;
+        lastError = 0;
 
+        while (opMode.opModeIsActive() && Math.abs(error = angleError(target, getHeading())) > 1) {
             double derivative = error - lastError;
             integral += error;
             double correction = (Kp * error) + (Ki * integral) + (Kd * derivative);
 
-            double turnPower = RangeClip(power * Math.signum(error) + correction, -1.0, 1.0);
+            double turnPower = clip(correction, -maxPower, maxPower);
             setTurnPower(turnPower);
 
             lastError = error;
@@ -88,21 +111,7 @@ public class PedroPath {
         setDrivePower(0);
     }
 
-    // --- Utility methods below ---
-
-    private void resetEncoders() {
-        DcMotor[] motors = {FL, FR, BL, BR};
-        for (DcMotor m : motors) {
-            m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-    }
-
-    private double avgEncoderPosition() {
-        return (FL.getCurrentPosition() + FR.getCurrentPosition() +
-                BL.getCurrentPosition() + BR.getCurrentPosition()) / 4.0;
-    }
-
+    // --- Utility Functions ---
     private void setDrivePower(double p) {
         FL.setPower(p);
         FR.setPower(p);
@@ -129,26 +138,7 @@ public class PedroPath {
         return diff;
     }
 
-    private double inchesToTicks(double inches) {
-        double TICKS_PER_REV = 560; // Example: REV HD Hex motor
-        double WHEEL_DIAMETER = 3.77;
-        double TICKS_PER_INCH = TICKS_PER_REV / (Math.PI * WHEEL_DIAMETER);
-        return inches * TICKS_PER_INCH;
-    }
-
-    private void updatePose() {
-        double x = currentPose.x;
-        double y = currentPose.y;
-        double heading = getHeading();
-        currentPose = new Pose(x, y, heading);
-    }
-
-    public Pose getPose() {
-        updatePose();
-        return currentPose;
-    }
-
-    private double RangeClip(double val, double min, double max) {
+    private double clip(double val, double min, double max) {
         return Math.max(min, Math.min(max, val));
     }
 }

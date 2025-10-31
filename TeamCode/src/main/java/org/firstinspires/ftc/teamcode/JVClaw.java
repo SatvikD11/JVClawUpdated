@@ -3,21 +3,21 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.pathing.PedroPath;
-import org.firstinspires.ftc.teamcode.helpers.BasicTele;
+import org.firstinspires.ftc.teamcode.helpers;
 
-@TeleOp(name="Robot: JV Claw", group="Robot")
+@TeleOp(name = "Robot: JV Claw", group = "Robot")
 public class JVClaw extends LinearOpMode {
 
     private DcMotor BL, BR, FL, FR;
-    private PedroPath PedroBody;
+    private PedroPath pedroBody;
 
     private double lastButtonTime = 0;
 
     @Override
     public void runOpMode() {
+        // --- Hardware Map ---
         BL = hardwareMap.get(DcMotor.class, "BL");
         BR = hardwareMap.get(DcMotor.class, "BR");
         FL = hardwareMap.get(DcMotor.class, "FL");
@@ -29,19 +29,19 @@ public class JVClaw extends LinearOpMode {
         BL.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.FORWARD);
 
-        // --- Initialize pathing ---
-        PedroBody = new PedroPath(this, hardwareMap, FL, FR, BL, BR);
+        // --- Initialize PedroPath ---
+        pedroBody = new PedroPath(this, hardwareMap);
 
-        telemetry.addData(">", "Robot Ready. Press START.");
+        telemetry.addLine("Robot Ready. Press START.");
         telemetry.update();
 
         waitForStart();
 
-        // --- Main TeleOp loop ---
+        // --- Main TeleOp Loop ---
         while (opModeIsActive()) {
 
-            // Basic drive control
-            BasicTele.basicTele(
+            // Basic drive (make sure the helper method name matches your helpers.java)
+            helpers.BasicTele(
                     FL, FR, BL, BR,
                     gamepad1.left_stick_y,
                     gamepad1.left_stick_x,
@@ -53,7 +53,7 @@ public class JVClaw extends LinearOpMode {
                     gamepad1.right_bumper && gamepad1.left_bumper || gamepad1.left_stick_button
             );
 
-            // Reverse orientation toggle
+            // --- Reverse orientation toggle ---
             if (gamepad1.right_stick_button) {
                 BL.setDirection(DcMotor.Direction.FORWARD);
                 FL.setDirection(DcMotor.Direction.FORWARD);
@@ -61,27 +61,34 @@ public class JVClaw extends LinearOpMode {
                 FR.setDirection(DcMotor.Direction.REVERSE);
             }
 
-            // Debounced controls for autonomous snippets
+            // --- Debounced Controls for Autonomous Snippets ---
             double now = getRuntime();
 
-            if (gamepad1.triangle && now - lastButtonTime > 0.3) {
-                PedroBody.driveForward(11, 0.5);
+            // Forward
+            if (gamepad1.y && now - lastButtonTime > 0.3) {
+                pedroBody.driveForward(11, 0.5);
                 lastButtonTime = now;
             }
-            else if (gamepad1.circle && now - lastButtonTime > 0.3) {
-                PedroBody.driveForward(11, -0.5);
+            // Backward
+            else if (gamepad1.b && now - lastButtonTime > 0.3) {
+                pedroBody.driveForward(-11, 0.5);
                 lastButtonTime = now;
             }
-            else if (gamepad1.square && now - lastButtonTime > 0.3) {
-                PedroBody.turnIMU(-90, 1);
+            // Turn Left 90°
+            else if (gamepad1.x && now - lastButtonTime > 0.3) {
+                pedroBody.turnIMU(-90, 0.5);
                 lastButtonTime = now;
             }
-            else if (gamepad1.cross && now - lastButtonTime > 0.3) {
-                PedroBody.turnIMU(90, 1);
+            // Turn Right 90°
+            else if (gamepad1.a && now - lastButtonTime > 0.3) {
+                pedroBody.turnIMU(90, 0.5);
                 lastButtonTime = now;
             }
 
-            telemetry.addData("Heading", "%.2f", PedroBody.getHeading());
+            // --- Telemetry ---
+            telemetry.addData("Heading", "%.2f°", pedroBody.getHeading());
+            telemetry.addData("Encoder Avg", "%.1f",
+                    (FL.getCurrentPosition() + FR.getCurrentPosition() + BL.getCurrentPosition() + BR.getCurrentPosition()) / 4.0);
             telemetry.update();
 
             idle();
